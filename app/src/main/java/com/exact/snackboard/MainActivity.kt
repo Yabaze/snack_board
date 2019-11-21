@@ -289,121 +289,87 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
         cellsGridView.adapter =
             SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
 
-        //ladder functions
+        //ladder And Snake Movement
 
         when (value) {
+            //Ladder
             9 -> {
-                if (pos != null) {
-                    a[pos].isActive = false
-                    a[pos].playerId = null
-                }
 
                 player[playerId!!].value = 31
 
-                for (i in a) {
-
-                    if (i.value == player[playerId].value) {
-
-                        player[playerId].pos = a.indexOf(i)
-
-                    }
-                }
-                if (player[playerId].pos != null) {
-                    a[player[playerId].pos!!].isActive = true
-                    a[player[playerId].pos!!].playerId = playerId
-                }
-
-
-                Handler().postDelayed({
-                    cellsGridView.adapter =
-                        SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
-
-                }, 1000)
-
             }
             16 -> {
-                if (pos != null) {
-                    a[pos].isActive = false
-                    a[pos].playerId = null
-                }
 
                 player[playerId!!].value = 45
 
-                for (i in a) {
-
-                    if (i.value == player[playerId].value) {
-
-                        player[playerId].pos = a.indexOf(i)
-
-                    }
-                }
-                if (player[playerId].pos != null) {
-                    a[player[playerId].pos!!].isActive = true
-                    a[player[playerId].pos!!].playerId = playerId
-                }
-
-                Handler().postDelayed({
-                    cellsGridView.adapter =
-                        SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
-
-                }, 1000)
             }
             18 -> {
-                if (pos != null) {
-                    a[pos].isActive = false
-                    a[pos].playerId = null
-                }
 
                 player[playerId!!].value = 69
 
-                for (i in a) {
-
-                    if (i.value == player[playerId].value) {
-
-                        player[playerId].pos = a.indexOf(i)
-
-                    }
-                }
-                if (player[playerId].pos != null) {
-                    a[player[playerId].pos!!].isActive = false
-                    a[player[playerId].pos!!].playerId = null
-                }
-
-                Handler().postDelayed({
-                    cellsGridView.adapter =
-                        SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
-
-                }, 2000)
             }
             48 -> {
-                if (pos != null) {
-                    a[pos].isActive = false
-                    a[pos].playerId = null
-                }
 
                 player[playerId!!].value = 66
 
-                for (i in a) {
-
-                    if (i.value == player[playerId].value) {
-
-                        player[playerId].pos = a.indexOf(i)
-
-                    }
-                }
-
-                if (player[playerId].pos != null) {
-                    a[player[playerId].pos!!].isActive = true
-                    a[player[playerId].pos!!].playerId = playerId
-                }
-
-
-                Handler().postDelayed({
-                    cellsGridView.adapter =
-                        SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
-
-                }, 2000)
             }
+            50 -> {
+                player[playerId!!].value = 93
+
+            }
+            63 -> {
+                player[playerId!!].value = 81
+
+            }
+            //Snake
+            99 -> {
+                player[playerId!!].value = 39
+
+            }
+            86 -> {
+                player[playerId!!].value = 51
+
+            }
+            74 -> {
+
+                player[playerId!!].value = 22
+
+            }
+            32 -> {
+
+                player[playerId!!].value = 6
+
+            }
+
+        }
+
+        if (player[playerId!!].value != value) {
+
+            if (pos != null) {
+                a[pos].isActive = false
+                a[pos].playerId = null
+            }
+
+            for (i in a) {
+
+                if (i.value == player[playerId].value) {
+
+                    player[playerId].pos = a.indexOf(i)
+
+                }
+            }
+
+            if (player[playerId].pos != null) {
+                a[player[playerId].pos!!].isActive = true
+                a[player[playerId].pos!!].playerId = playerId
+            }
+
+
+            Handler().postDelayed({
+                cellsGridView.adapter =
+                    SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
+
+            }, 2000)
         }
 
 
