@@ -1,15 +1,45 @@
 package com.exact.snackboard
 
+import android.graphics.drawable.Drawable
+import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.button.MaterialButton
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.IOException
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
+
+    private var diceImages = intArrayOf(
+        R.drawable.d1,
+        R.drawable.d2,
+        R.drawable.d3,
+        R.drawable.d4,
+        R.drawable.d5,
+        R.drawable.d6
+    )
+    private var diceImagesDrawable = arrayOfNulls<Drawable>(6)
+
+    private var rollAnimations = 50
+    private var delayTime = 15
+    private var roll = 5
+
+    var handler: Handler? = Handler {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById<ImageView>(imageView!!.id).setImageDrawable(getDrawable(diceImages[roll]))
+        }
+        true
+    }
+
+    var imageView: View? = null
+    private var paused = false
 
     override fun makeOutPlayer(
         playerDetails: PlayerDetails,
@@ -32,20 +62,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
 
         when (playerId) {
             0 -> {
-                findViewById<MaterialButton>(R.id.one).setOnClickListener(this@MainActivity)
-                radioGroup.check(R.id.r1)
+                findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
+                firstIV.visibility = View.VISIBLE
             }
             1 -> {
-                findViewById<MaterialButton>(R.id.two).setOnClickListener(this@MainActivity)
-                radioGroup.check(R.id.r2)
+                findViewById<ImageView>(R.id.two).setOnClickListener(this@MainActivity)
+                secondIV.visibility = View.VISIBLE
+
             }
             2 -> {
-                findViewById<MaterialButton>(R.id.three).setOnClickListener(this@MainActivity)
-                radioGroup.check(R.id.r3)
+                findViewById<ImageView>(R.id.three).setOnClickListener(this@MainActivity)
+                thirdIV.visibility = View.VISIBLE
+
             }
             3 -> {
-                findViewById<MaterialButton>(R.id.four).setOnClickListener(this@MainActivity)
-                radioGroup.check(R.id.r4)
+                findViewById<ImageView>(R.id.four).setOnClickListener(this@MainActivity)
+                forthIV.visibility = View.VISIBLE
+
             }
         }
 
@@ -54,47 +87,39 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
     private var a: MutableList<CellData> = mutableListOf()
     private var adapter: SingleCellGridViewAdapter? = null
 
-    var player: MutableList<PlayerDetails> = mutableListOf()
+    private var player: MutableList<PlayerDetails> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        radioGroup.isClickable = false
+        for (i in 0..5) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                diceImagesDrawable[i] = getDrawable(diceImages[i])
+            }
+        }
 
         resetGameData()
+        //hideAnimationArrow()
+        disableAll()
+        findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
+        firstIV.visibility = View.VISIBLE
 
-        radioGroup.check(R.id.r1)
+        Glide.with(this@MainActivity).load(R.drawable.right)
+            .transform(RotateTransformation(this@MainActivity, 180f)).into(firstIV)
+        Glide.with(this@MainActivity).load(R.drawable.right).into(secondIV)
+        Glide.with(this@MainActivity).load(R.drawable.right)
+            .transform(RotateTransformation(this@MainActivity, 180f)).into(thirdIV)
+        Glide.with(this@MainActivity).load(R.drawable.right).into(forthIV)
+
+
         adapter = SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
         cellsGridView.adapter = adapter
 
     }
 
-    private fun resetGameData() {
-        player = mutableListOf()
-        player.add(PlayerDetails(0, 0, false, R.color.red, "Mirakle"))
-        player.add(PlayerDetails(1, 0, false, R.color.green, "Yabaze"))
-        player.add(PlayerDetails(2, 0, false, R.color.blue, "Jegathesan"))
-        player.add(PlayerDetails(3, 0, false, R.color.violot, "cool"))
 
-        a = mutableListOf()
-        for (i in 10 downTo 1) {
-            when (i % 2) {
-                0 -> {
-                    for (j in 10 downTo 1) {
-                        a.add(CellData(false, (i - 1) * 10 + j))
-                    }
-                }
-                1 -> {
-                    for (j in 9 downTo 0) {
-                        a.add(CellData(false, (i * 10 - j)))
-                    }
-                }
-            }
-        }
-    }
-
-    override fun onClick(view: View) {
+    private fun afterDiceRoll(view: View) {
 
         var started = false
         var value = 0
@@ -136,7 +161,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
             }
         }
 
-        val randomNumber = (1..6).random()
+        val randomNumber = roll + 1//(1..6).random()
 
         dice.text = "" + randomNumber
 
@@ -152,12 +177,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
             if (temp <= 100) {
                 value = temp
                 if (value == 100) {
+
                     dice.text = "$playerName Won"
                     view.setOnClickListener(null)
 
-                    findViewById<MaterialButton>(view.id).text =
-                        " ${findViewById<MaterialButton>(view.id).text}  *"
-                    //a[pos].playerId = playerId
+                    /*findViewById<ImageView>(view.id).text =
+                        " ${findViewById<ImageView>(view.id).text}  *"*/
+
                 }
             }
 
@@ -181,24 +207,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                 when (view.id) {
                     R.id.one -> {
                         disableAll()
-                        findViewById<MaterialButton>(R.id.two).setOnClickListener(this@MainActivity)
-                        radioGroup.check(R.id.r2)
+                        findViewById<ImageView>(R.id.two).setOnClickListener(this@MainActivity)
+                        secondIV.visibility = View.VISIBLE
                     }
                     R.id.two -> {
                         disableAll()
-                        findViewById<MaterialButton>(R.id.three).setOnClickListener(this@MainActivity)
-                        radioGroup.check(R.id.r3)
+                        findViewById<ImageView>(R.id.three).setOnClickListener(this@MainActivity)
+                        thirdIV.visibility = View.VISIBLE
                     }
                     R.id.three -> {
                         disableAll()
-                        findViewById<MaterialButton>(R.id.four).setOnClickListener(this@MainActivity)
-                        radioGroup.check(R.id.r4)
+                        findViewById<ImageView>(R.id.four).setOnClickListener(this@MainActivity)
+                        forthIV.visibility = View.VISIBLE
 
                     }
                     R.id.four -> {
                         disableAll()
-                        findViewById<MaterialButton>(R.id.one).setOnClickListener(this@MainActivity)
-                        radioGroup.check(R.id.r1)
+                        findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
+                        firstIV.visibility = View.VISIBLE
                     }
                 }
                 return
@@ -223,14 +249,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                 if (player[0].value != 100) {
                     if (randomNumber != 6) {
 
-                        radioGroup.check(R.id.r2)
-
                         disableAll()
-
-                        findViewById<MaterialButton>(R.id.two).setOnClickListener(this@MainActivity)
+                        secondIV.visibility = View.VISIBLE
+                        findViewById<ImageView>(R.id.two).setOnClickListener(this@MainActivity)
 
                     } else {
-                        radioGroup.check(R.id.r1)
+                        hideAnimationArrow()
+                        firstIV.visibility = View.VISIBLE
                     }
                 }
             }
@@ -242,12 +267,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
 
                 if (player[1].value != 100) {
                     if (randomNumber != 6) {
-                        radioGroup.check(R.id.r3)
-
                         disableAll()
-                        findViewById<MaterialButton>(R.id.three).setOnClickListener(this@MainActivity)
+                        thirdIV.visibility = View.VISIBLE
+                        findViewById<ImageView>(R.id.three).setOnClickListener(this@MainActivity)
                     } else {
-                        radioGroup.check(R.id.r2)
+                        hideAnimationArrow()
+                        secondIV.visibility = View.VISIBLE
                     }
                 }
             }
@@ -258,11 +283,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                 player[2].pos = pos
                 if (player[2].value != 100) {
                     if (randomNumber != 6) {
-                        radioGroup.check(R.id.r4)
                         disableAll()
-                        findViewById<MaterialButton>(R.id.four).setOnClickListener(this@MainActivity)
+                        forthIV.visibility = View.VISIBLE
+                        findViewById<ImageView>(R.id.four).setOnClickListener(this@MainActivity)
                     } else {
-                        radioGroup.check(R.id.r3)
+                        hideAnimationArrow()
+                        thirdIV.visibility = View.VISIBLE
                     }
                 }
             }
@@ -274,13 +300,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
 
                 if (player[3].value != 100) {
                     if (randomNumber != 6) {
-
-                        radioGroup.check(R.id.r1)
-
                         disableAll()
-                        findViewById<MaterialButton>(R.id.one).setOnClickListener(this@MainActivity)
+                        firstIV.visibility = View.VISIBLE
+                        findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
                     } else {
-                        radioGroup.check(R.id.r4)
+                        hideAnimationArrow()
+                        forthIV.visibility = View.VISIBLE
                     }
                 }
             }
@@ -294,53 +319,36 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
         when (value) {
             //Ladder
             9 -> {
-
                 player[playerId!!].value = 31
-
             }
             16 -> {
-
                 player[playerId!!].value = 45
-
             }
             18 -> {
-
                 player[playerId!!].value = 69
-
             }
             48 -> {
-
                 player[playerId!!].value = 66
-
             }
             50 -> {
                 player[playerId!!].value = 93
-
             }
             63 -> {
                 player[playerId!!].value = 81
-
             }
             //Snake
             99 -> {
                 player[playerId!!].value = 39
-
             }
             86 -> {
                 player[playerId!!].value = 51
-
             }
             74 -> {
-
                 player[playerId!!].value = 22
-
             }
             32 -> {
-
                 player[playerId!!].value = 6
-
             }
-
         }
 
         if (player[playerId!!].value != value) {
@@ -376,21 +384,121 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
     }
 
 
+    private fun doRoll() {
+        roll = (0..5).random()
+        synchronized(layoutInflater) {
+
+            handler!!.sendEmptyMessage(0)
+
+        }
+        try {
+            Thread.sleep(delayTime.toLong())
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+    }
+
+    private fun resetGameData() {
+        player = mutableListOf()
+        player.add(PlayerDetails(0, 0, false, R.color.red, "Mirakle", R.drawable.player_icon_red))
+        player.add(
+            PlayerDetails(
+                1,
+                0,
+                false,
+                R.color.green,
+                "Yabaze",
+                R.drawable.player_icon_green
+            )
+        )
+        player.add(
+            PlayerDetails(
+                2,
+                0,
+                false,
+                R.color.blue,
+                "Jegathesan",
+                R.drawable.player_icon_blue
+            )
+        )
+        player.add(
+            PlayerDetails(
+                3,
+                0,
+                false,
+                R.color.violot,
+                "cool",
+                R.drawable.player_icon_violot
+            )
+        )
+
+        a = mutableListOf()
+        for (i in 10 downTo 1) {
+            when (i % 2) {
+                0 -> {
+                    for (j in 10 downTo 1) {
+                        a.add(CellData(false, (i - 1) * 10 + j))
+                    }
+                }
+                1 -> {
+                    for (j in 9 downTo 0) {
+                        a.add(CellData(false, (i * 10 - j)))
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onClick(view: View) {
+        imageView = view
+        if (paused) return
+        Thread(Runnable {
+            for (i in 0 until rollAnimations) {
+                doRoll()
+            }
+
+            runOnUiThread {
+                afterDiceRoll(view)
+            }
+
+        }).start()
+
+        val mp = MediaPlayer.create(this, R.raw.roll)
+        try {
+            mp.prepare()
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        mp.start()
+    }
+
     private fun disableAll() {
-        findViewById<MaterialButton>(R.id.one).setOnClickListener(null)
-        findViewById<MaterialButton>(R.id.two).setOnClickListener(null)
-        findViewById<MaterialButton>(R.id.three).setOnClickListener(null)
-        findViewById<MaterialButton>(R.id.four).setOnClickListener(null)
+        findViewById<ImageView>(R.id.one).setOnClickListener(null)
+        findViewById<ImageView>(R.id.two).setOnClickListener(null)
+        findViewById<ImageView>(R.id.three).setOnClickListener(null)
+        findViewById<ImageView>(R.id.four).setOnClickListener(null)
+        hideAnimationArrow()
+    }
+
+    private fun hideAnimationArrow() {
+        firstIV.visibility = View.INVISIBLE
+        secondIV.visibility = View.INVISIBLE
+        thirdIV.visibility = View.INVISIBLE
+        forthIV.visibility = View.INVISIBLE
     }
 
     fun restartGame(view: View) {
         resetGameData()
-
-        radioGroup.check(R.id.r1)
         disableAll()
-        findViewById<MaterialButton>(R.id.one).setOnClickListener(this@MainActivity)
+        firstIV.visibility = View.VISIBLE
+        findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
         adapter = SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
         cellsGridView.adapter = adapter
     }
 
 }
+

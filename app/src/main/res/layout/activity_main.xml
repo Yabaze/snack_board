@@ -6,19 +6,43 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4">
 
+        <ImageView
+            android:id="@+id/three"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:src="@drawable/d1"
+            android:onClick="onClick"
+            android:layout_weight="1" />
 
-<!--        <ImageView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:src="@drawable/abcd"-->
-<!--            android:scaleType="fitXY"/>-->
+        <ImageView
+            android:id="@+id/thirdIV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="1"
+            android:src="@drawable/right" />
+
+        <ImageView
+            android:id="@+id/forthIV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="1"
+            android:src="@drawable/right" />
+
+        <ImageView
+            android:id="@+id/four"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:src="@drawable/d1"
+            android:onClick="onClick"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
     <GridView
         android:id="@+id/cellsGridView"
@@ -26,11 +50,11 @@
         android:layout_height="wrap_content"
         android:horizontalSpacing="0dp"
         android:numColumns="10"
+        android:columnWidth="@dimen/_30sdp"
         android:stretchMode="columnWidth"
+        android:minHeight="@dimen/_300sdp"
         android:background="@drawable/abcf_"
-        android:verticalSpacing="2dp"/>
-
-    </RelativeLayout>
+        android:verticalSpacing="0dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,97 +62,36 @@
         android:orientation="horizontal"
         android:weightSum="4">
 
-        <com.google.android.material.button.MaterialButton
+        <ImageView
             android:id="@+id/one"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse"
+            android:layout_height="@dimen/_50sdp"
+            android:src="@drawable/d1"
             android:onClick="onClick"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_margin="3dp"
-            android:backgroundTint="@color/red" />
+            android:layout_weight="1" />
 
-        <com.google.android.material.button.MaterialButton
+        <ImageView
+            android:id="@+id/firstIV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="1"
+            android:src="@drawable/right" />
+
+        <ImageView
+            android:id="@+id/secondIV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="1"
+            android:src="@drawable/right" />
+
+        <ImageView
             android:id="@+id/two"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse"
+            android:layout_height="@dimen/_50sdp"
+            android:src="@drawable/d1"
             android:onClick="onClick"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_margin="3dp"
-            android:backgroundTint="@color/green" />
+            android:layout_weight="1" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/three"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="3"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse"
-            android:onClick="onClick"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_margin="3dp"
-            android:backgroundTint="@color/blue" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/four"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="4"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse"
-            android:onClick="onClick"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_margin="3dp"
-            android:backgroundTint="@color/violot" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="4">
-
-        <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/r1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="35dp" />
-
-            <RadioButton
-                android:id="@+id/r2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="35dp" />
-
-            <RadioButton
-                android:id="@+id/r3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="35dp" />
-
-            <RadioButton
-                android:id="@+id/r4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginLeft="35dp" />
-
-        </RadioGroup>
     </LinearLayout>
 
     <TextView
@@ -149,4 +112,6 @@
         android:text="Restart Game"
         android:onClick="restartGame"
         android:visibility="visible" />
+
+
 </LinearLayout>
