@@ -20,7 +20,7 @@ class SingleCellGridViewAdapter(
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
         val inflator = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val grid = inflator.inflate(R.layout.grid_adapter_view, null)
-        grid.textView.text = " ${abc[p0].value}"
+
 
         if (abc[p0].isActive!!) {
 
@@ -31,6 +31,7 @@ class SingleCellGridViewAdapter(
 
                     if (singlePlayerData.id == abc[p0].playerId) {
                         colorCode = singlePlayerData.colorCode!!
+                        grid.textView.text = " ${abc[p0].value}"
 
                     } else {
                         this.gameAction.makeOutPlayer(singlePlayerData,abc[p0].playerId)
@@ -40,26 +41,6 @@ class SingleCellGridViewAdapter(
 
             }
 
-//            //val viewColor = grid.textView.background as ColorDrawable
-//
-//            when (getBackgroundColor(grid.textView)) {
-//                R.color.red -> {
-//                    Toast.makeText(context, "${player[0].playerName} OUT ", Toast.LENGTH_LONG)
-//                        .show()
-//                }
-//                R.color.green -> {
-//                    Toast.makeText(context, "${player[1].playerName} OUT ", Toast.LENGTH_LONG)
-//                        .show()
-//                }
-//                R.color.blue -> {
-//                    Toast.makeText(context, "${player[2].playerName} OUT ", Toast.LENGTH_LONG)
-//                        .show()
-//                }
-//                R.color.violot -> {
-//                    Toast.makeText(context, "${player[3].playerName} OUT ", Toast.LENGTH_LONG)
-//                        .show()
-//                }
-//            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 grid.textView.setBackgroundColor(context.getColor(colorCode))
@@ -74,29 +55,6 @@ class SingleCellGridViewAdapter(
         //switch()
 
         return grid
-    }
-
-    fun getBackgroundColor(textView: TextView): Int {
-        val drawable = textView.background
-        if (drawable is ColorDrawable) {
-            if (Build.VERSION.SDK_INT >= 11) {
-                return drawable.color
-            }
-            try {
-                var field = drawable.javaClass.getDeclaredField("mState")
-                field.isAccessible = true
-                val `object` = field.get(drawable)
-                field = `object`.javaClass.getDeclaredField("mUseColor")
-                field.isAccessible = true
-                return field.getInt(`object`)
-            } catch (e: NoSuchFieldException) {
-                e.printStackTrace()
-            } catch (e: IllegalAccessException) {
-                e.printStackTrace()
-            }
-
-        }
-        return 0
     }
 
     override fun getItem(p0: Int): Any {

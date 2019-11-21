@@ -6,15 +6,31 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+
+
+<!--        <ImageView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:src="@drawable/abcd"-->
+<!--            android:scaleType="fitXY"/>-->
+
     <GridView
         android:id="@+id/cellsGridView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:horizontalSpacing="0dp"
         android:numColumns="10"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="0dp" />
+        android:background="@drawable/abcf_"
+        android:verticalSpacing="2dp"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

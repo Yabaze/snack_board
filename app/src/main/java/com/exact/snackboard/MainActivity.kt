@@ -1,6 +1,7 @@
 package com.exact.snackboard
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -158,32 +159,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                         " ${findViewById<MaterialButton>(view.id).text}  *"
                     //a[pos].playerId = playerId
                 }
-            } else {
-                Toast.makeText(this@MainActivity, "Move Not Available!", Toast.LENGTH_LONG).show()
-                when (view.id) {
-                    R.id.one -> {
-                        disableAll()
-                        findViewById<MaterialButton>(R.id.four).setOnClickListener(this@MainActivity)
-                        radioGroup.check(R.id.r2)
-                    }
-                    R.id.two -> {
-                        disableAll()
-                        findViewById<MaterialButton>(R.id.one).setOnClickListener(this@MainActivity)
-                        radioGroup.check(R.id.r3)
-                    }
-                    R.id.three -> {
-                        disableAll()
-                        findViewById<MaterialButton>(R.id.two).setOnClickListener(this@MainActivity)
-                        radioGroup.check(R.id.r4)
-
-                    }
-                    R.id.four -> {
-                        disableAll()
-                        findViewById<MaterialButton>(R.id.three).setOnClickListener(this@MainActivity)
-                        radioGroup.check(R.id.r1)
-                    }
-                }
-                return
             }
 
             for (i in a) {
@@ -198,6 +173,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
             if (pos != null) {
                 a[pos].isActive = true
                 a[pos].playerId = playerId
+            }
+
+
+            if (temp > 100) {
+                Toast.makeText(this@MainActivity, "Move Not Available!", Toast.LENGTH_LONG).show()
+                when (view.id) {
+                    R.id.one -> {
+                        disableAll()
+                        findViewById<MaterialButton>(R.id.two).setOnClickListener(this@MainActivity)
+                        radioGroup.check(R.id.r2)
+                    }
+                    R.id.two -> {
+                        disableAll()
+                        findViewById<MaterialButton>(R.id.three).setOnClickListener(this@MainActivity)
+                        radioGroup.check(R.id.r3)
+                    }
+                    R.id.three -> {
+                        disableAll()
+                        findViewById<MaterialButton>(R.id.four).setOnClickListener(this@MainActivity)
+                        radioGroup.check(R.id.r4)
+
+                    }
+                    R.id.four -> {
+                        disableAll()
+                        findViewById<MaterialButton>(R.id.one).setOnClickListener(this@MainActivity)
+                        radioGroup.check(R.id.r1)
+                    }
+                }
+                return
             }
 
         }
@@ -285,7 +289,126 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
         cellsGridView.adapter =
             SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
 
+        //ladder functions
+
+        when (value) {
+            9 -> {
+                if (pos != null) {
+                    a[pos].isActive = false
+                    a[pos].playerId = null
+                }
+
+                player[playerId!!].value = 31
+
+                for (i in a) {
+
+                    if (i.value == player[playerId].value) {
+
+                        player[playerId].pos = a.indexOf(i)
+
+                    }
+                }
+                if (player[playerId].pos != null) {
+                    a[player[playerId].pos!!].isActive = true
+                    a[player[playerId].pos!!].playerId = playerId
+                }
+
+
+                Handler().postDelayed({
+                    cellsGridView.adapter =
+                        SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
+
+                }, 1000)
+
+            }
+            16 -> {
+                if (pos != null) {
+                    a[pos].isActive = false
+                    a[pos].playerId = null
+                }
+
+                player[playerId!!].value = 45
+
+                for (i in a) {
+
+                    if (i.value == player[playerId].value) {
+
+                        player[playerId].pos = a.indexOf(i)
+
+                    }
+                }
+                if (player[playerId].pos != null) {
+                    a[player[playerId].pos!!].isActive = true
+                    a[player[playerId].pos!!].playerId = playerId
+                }
+
+                Handler().postDelayed({
+                    cellsGridView.adapter =
+                        SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
+
+                }, 1000)
+            }
+            18 -> {
+                if (pos != null) {
+                    a[pos].isActive = false
+                    a[pos].playerId = null
+                }
+
+                player[playerId!!].value = 69
+
+                for (i in a) {
+
+                    if (i.value == player[playerId].value) {
+
+                        player[playerId].pos = a.indexOf(i)
+
+                    }
+                }
+                if (player[playerId].pos != null) {
+                    a[player[playerId].pos!!].isActive = false
+                    a[player[playerId].pos!!].playerId = null
+                }
+
+                Handler().postDelayed({
+                    cellsGridView.adapter =
+                        SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
+
+                }, 2000)
+            }
+            48 -> {
+                if (pos != null) {
+                    a[pos].isActive = false
+                    a[pos].playerId = null
+                }
+
+                player[playerId!!].value = 66
+
+                for (i in a) {
+
+                    if (i.value == player[playerId].value) {
+
+                        player[playerId].pos = a.indexOf(i)
+
+                    }
+                }
+
+                if (player[playerId].pos != null) {
+                    a[player[playerId].pos!!].isActive = true
+                    a[player[playerId].pos!!].playerId = playerId
+                }
+
+
+                Handler().postDelayed({
+                    cellsGridView.adapter =
+                        SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
+
+                }, 2000)
+            }
+        }
+
+
     }
+
 
     private fun disableAll() {
         findViewById<MaterialButton>(R.id.one).setOnClickListener(null)
