@@ -1,6 +1,5 @@
 package com.exact.snackboard
 
-import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
@@ -25,20 +24,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
         R.drawable.d5,
         R.drawable.d6
     )
-    private var diceImagesDrawable = arrayOfNulls<Drawable>(6)
 
     private var rollAnimations = 50
     private var delayTime = 15
     private var roll = 5
 
-    var handler: Handler? = Handler {
+    private var handler: Handler? = Handler {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             findViewById<ImageView>(imageView!!.id).setImageDrawable(getDrawable(diceImages[roll]))
         }
         true
     }
 
-    var imageView: View? = null
+    lateinit var imageView: View
     private var paused = false
 
     override fun makeOutPlayer(
@@ -62,21 +60,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
 
         when (playerId) {
             0 -> {
-                findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
+                one.setOnClickListener(this@MainActivity)
                 firstIV.visibility = View.VISIBLE
             }
             1 -> {
-                findViewById<ImageView>(R.id.two).setOnClickListener(this@MainActivity)
+                two.setOnClickListener(this@MainActivity)
                 secondIV.visibility = View.VISIBLE
 
             }
             2 -> {
-                findViewById<ImageView>(R.id.three).setOnClickListener(this@MainActivity)
+                three.setOnClickListener(this@MainActivity)
                 thirdIV.visibility = View.VISIBLE
 
             }
             3 -> {
-                findViewById<ImageView>(R.id.four).setOnClickListener(this@MainActivity)
+                four.setOnClickListener(this@MainActivity)
                 forthIV.visibility = View.VISIBLE
 
             }
@@ -85,7 +83,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
     }
 
     private var a: MutableList<CellData> = mutableListOf()
-    private var adapter: SingleCellGridViewAdapter? = null
+    private lateinit var adapter: SingleCellGridViewAdapter
 
     private var player: MutableList<PlayerDetails> = mutableListOf()
 
@@ -93,17 +91,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        for (i in 0..5) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                diceImagesDrawable[i] = getDrawable(diceImages[i])
-            }
-        }
-
         resetGameData()
-        //hideAnimationArrow()
-        disableAll()
-        findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
-        firstIV.visibility = View.VISIBLE
 
         Glide.with(this@MainActivity).load(R.drawable.right)
             .transform(RotateTransformation(this@MainActivity, 180f)).into(firstIV)
@@ -112,12 +100,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
             .transform(RotateTransformation(this@MainActivity, 180f)).into(thirdIV)
         Glide.with(this@MainActivity).load(R.drawable.right).into(forthIV)
 
-
         adapter = SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
         cellsGridView.adapter = adapter
 
     }
-
 
     private fun afterDiceRoll(view: View) {
 
@@ -201,29 +187,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                 a[pos].playerId = playerId
             }
 
-
             if (temp > 100) {
                 Toast.makeText(this@MainActivity, "Move Not Available!", Toast.LENGTH_LONG).show()
                 when (view.id) {
                     R.id.one -> {
                         disableAll()
-                        findViewById<ImageView>(R.id.two).setOnClickListener(this@MainActivity)
+                        two.setOnClickListener(this@MainActivity)
                         secondIV.visibility = View.VISIBLE
                     }
                     R.id.two -> {
                         disableAll()
-                        findViewById<ImageView>(R.id.three).setOnClickListener(this@MainActivity)
+                        three.setOnClickListener(this@MainActivity)
                         thirdIV.visibility = View.VISIBLE
                     }
                     R.id.three -> {
                         disableAll()
-                        findViewById<ImageView>(R.id.four).setOnClickListener(this@MainActivity)
+                        four.setOnClickListener(this@MainActivity)
                         forthIV.visibility = View.VISIBLE
 
                     }
                     R.id.four -> {
                         disableAll()
-                        findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
+                        one.setOnClickListener(this@MainActivity)
                         firstIV.visibility = View.VISIBLE
                     }
                 }
@@ -251,7 +236,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
 
                         disableAll()
                         secondIV.visibility = View.VISIBLE
-                        findViewById<ImageView>(R.id.two).setOnClickListener(this@MainActivity)
+                        two.setOnClickListener(this@MainActivity)
 
                     } else {
                         hideAnimationArrow()
@@ -269,7 +254,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                     if (randomNumber != 6) {
                         disableAll()
                         thirdIV.visibility = View.VISIBLE
-                        findViewById<ImageView>(R.id.three).setOnClickListener(this@MainActivity)
+                        three.setOnClickListener(this@MainActivity)
                     } else {
                         hideAnimationArrow()
                         secondIV.visibility = View.VISIBLE
@@ -285,7 +270,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                     if (randomNumber != 6) {
                         disableAll()
                         forthIV.visibility = View.VISIBLE
-                        findViewById<ImageView>(R.id.four).setOnClickListener(this@MainActivity)
+                        four.setOnClickListener(this@MainActivity)
                     } else {
                         hideAnimationArrow()
                         thirdIV.visibility = View.VISIBLE
@@ -302,7 +287,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                     if (randomNumber != 6) {
                         disableAll()
                         firstIV.visibility = View.VISIBLE
-                        findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
+                        one.setOnClickListener(this@MainActivity)
                     } else {
                         hideAnimationArrow()
                         forthIV.visibility = View.VISIBLE
@@ -372,31 +357,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                 a[player[playerId].pos!!].playerId = playerId
             }
 
-
             Handler().postDelayed({
                 cellsGridView.adapter =
                     SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
 
             }, 2000)
         }
-
-
     }
-
 
     private fun doRoll() {
         roll = (0..5).random()
         synchronized(layoutInflater) {
-
             handler!!.sendEmptyMessage(0)
-
         }
         try {
             Thread.sleep(delayTime.toLong())
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-
     }
 
     private fun resetGameData() {
@@ -448,6 +426,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
                 }
             }
         }
+
+        disableAll()
+        firstIV.visibility = View.VISIBLE
+        one.setOnClickListener(this@MainActivity)
     }
 
     override fun onClick(view: View) {
@@ -477,10 +459,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
     }
 
     private fun disableAll() {
-        findViewById<ImageView>(R.id.one).setOnClickListener(null)
-        findViewById<ImageView>(R.id.two).setOnClickListener(null)
-        findViewById<ImageView>(R.id.three).setOnClickListener(null)
-        findViewById<ImageView>(R.id.four).setOnClickListener(null)
+        one.setOnClickListener(null)
+        two.setOnClickListener(null)
+        three.setOnClickListener(null)
+        four.setOnClickListener(null)
         hideAnimationArrow()
     }
 
@@ -493,9 +475,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
 
     fun restartGame(view: View) {
         resetGameData()
-        disableAll()
-        firstIV.visibility = View.VISIBLE
-        findViewById<ImageView>(R.id.one).setOnClickListener(this@MainActivity)
+
+
         adapter = SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
         cellsGridView.adapter = adapter
     }
