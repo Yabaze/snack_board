@@ -13,19 +13,12 @@
         android:weightSum="4">
 
         <ImageView
-            android:id="@+id/three"
+            android:id="@+id/four"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
             android:src="@drawable/d1"
             android:onClick="onClick"
             android:layout_weight="1" />
-
-        <ImageView
-            android:id="@+id/thirdIV"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_weight="1"
-            android:src="@drawable/right" />
 
         <ImageView
             android:id="@+id/forthIV"
@@ -35,7 +28,14 @@
             android:src="@drawable/right" />
 
         <ImageView
-            android:id="@+id/four"
+            android:id="@+id/thirdIV"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_50sdp"
+            android:layout_weight="1"
+            android:src="@drawable/right" />
+
+        <ImageView
+            android:id="@+id/three"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
             android:src="@drawable/d1"

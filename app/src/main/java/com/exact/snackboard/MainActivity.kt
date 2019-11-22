@@ -97,8 +97,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
             .transform(RotateTransformation(this@MainActivity, 180f)).into(firstIV)
         Glide.with(this@MainActivity).load(R.drawable.right).into(secondIV)
         Glide.with(this@MainActivity).load(R.drawable.right)
-            .transform(RotateTransformation(this@MainActivity, 180f)).into(thirdIV)
-        Glide.with(this@MainActivity).load(R.drawable.right).into(forthIV)
+            .transform(RotateTransformation(this@MainActivity, 180f)).into(forthIV)
+        Glide.with(this@MainActivity).load(R.drawable.right).into(thirdIV)
 
         adapter = SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
         cellsGridView.adapter = adapter
