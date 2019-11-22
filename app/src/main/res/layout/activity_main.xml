@@ -53,7 +53,7 @@
         android:columnWidth="@dimen/_30sdp"
         android:stretchMode="columnWidth"
         android:minHeight="@dimen/_300sdp"
-        android:background="@drawable/abcf_"
+        android:background="@drawable/snake_board"
         android:verticalSpacing="0dp" />
 
     <LinearLayout

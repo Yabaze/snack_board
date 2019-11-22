@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
 
     private var handler: Handler? = Handler {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            findViewById<ImageView>(imageView!!.id).setImageDrawable(getDrawable(diceImages[roll]))
+            findViewById<ImageView>(imageView.id).setImageDrawable(getDrawable(diceImages[roll]))
         }
         true
     }
@@ -475,7 +475,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, GameAction {
 
     fun restartGame(view: View) {
         resetGameData()
-
 
         adapter = SingleCellGridViewAdapter(this@MainActivity, a, player, this@MainActivity)
         cellsGridView.adapter = adapter
